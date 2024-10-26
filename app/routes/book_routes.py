@@ -24,7 +24,18 @@ def create_book():
 
 @books_bp.get("")
 def get_all_books():
-    query = db.select(Book).order_by(Book.id)
+    query = db.select(Book)
+
+    title_param = request.args.get("title")
+    description_param = request.args.get("description")
+
+    if title_param:
+        query = query.where(Book.title.ilike(f"%{title_param}%"))
+    if description_param:
+        query = query.where(Book.description.ilike(f"%{description_param}%"))
+
+    query = query.order_by(Book.id)
+
     books = db.session.scalars(query)
     
     # could also be written as:
@@ -74,7 +85,7 @@ def update_book(book_id):
     book.description = request_body["description"]
     db.session.commit()
     
-    return Response(status=204,mimetype="application/jason")
+    return Response(status=204,mimetype="application/json")
 
 @books_bp.delete("/<book_id>")
 def delete_book(book_id):
@@ -83,5 +94,3 @@ def delete_book(book_id):
     db.session.commit()
 
     return Response(status=204, mimetype="application/json")
-
-    
