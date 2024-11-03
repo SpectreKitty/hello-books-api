@@ -1,4 +1,5 @@
 from app.models.book import Book
+from app.models.author import Author
 import pytest
 
 def test_from_dict_returns_book():
@@ -50,6 +51,37 @@ def test_from_dict_with_extra_keys():
     # Assert
     assert new_book.title == "New Book"
     assert new_book.description == "The Best!"
+
+def test_from_dict_required_properties_only_returns_book():
+    # Arrange
+    book_data = {
+        "title": "New Book",
+        "description": "The Best!"
+    }
+
+    # Act
+    new_book = Book.from_dict(book_data)
+
+    # Assert
+    assert new_book.title == "New Book"
+    assert new_book.description == "The Best!"
+
+def test_from_dict_all_properties_returns_book():
+    # Arrange
+    author = Author(id=1, name="New Author")
+    book_data = {
+        "title": "New Book",
+        "description": "The Best!",
+        "author_id": 1,
+    }
+
+    # Act
+    new_book = Book.from_dict(book_data)
+
+    # Assert
+    assert new_book.title == "New Book"
+    assert new_book.description == "The Best!"
+    assert new_book.author_id == 1
 
 def test_to_dict_no_missing_data():
     # Arrange

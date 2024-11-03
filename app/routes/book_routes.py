@@ -1,5 +1,5 @@
-from flask import Blueprint, abort, make_response, request, Response
-from .routes_utilities import validate_model
+from flask import Blueprint, request, Response
+from .routes_utilities import validate_model, create_model, get_models_with_filters
 from app.models.book import Book
 from ..db import db
 
@@ -9,17 +9,7 @@ bp = Blueprint("books_bp", __name__, url_prefix="/books")
 def create_book():
     request_body = request.get_json()
     
-    try:    
-        new_book = Book.from_dict(request_body)
-    
-    except KeyError as error:
-        response = {"message":f"Invalid request: missing {error.args[0]}"}
-        abort(make_response(response, 400))
-
-    db.session.add(new_book)
-    db.session.commit()
-    
-    return new_book.to_dict(), 201
+    return create_model(Book, request_body)
 
 @bp.get("")
 def get_all_books():
@@ -61,6 +51,10 @@ def update_book(book_id):
     db.session.commit()
     
     return Response(status=204,mimetype="application/json")
+
+@bp.get("")
+def get_all_books():
+    return get_models_with_filters(Book, request.args)
 
 @bp.delete("/<book_id>")
 def delete_book(book_id):

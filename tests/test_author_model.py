@@ -60,9 +60,9 @@ def test_to_dict_missing_id():
     assert result["id"] is None
     assert result["name"] == "Katee Roberts"
 
-def test_to_dict_missing_title():
+def test_to_dict_missing_name():
     # Arrange
-    test_data = Author(id=1,)
+    test_data = Author(id=1)
 
     # Act
     result = test_data.to_dict()
