@@ -11,29 +11,6 @@ def create_book():
     
     return create_model(Book, request_body)
 
-@bp.get("")
-def get_all_books():
-    query = db.select(Book)
-
-    title_param = request.args.get("title")
-    description_param = request.args.get("description")
-
-    if title_param:
-        query = query.where(Book.title.ilike(f"%{title_param}%"))
-    if description_param:
-        query = query.where(Book.description.ilike(f"%{description_param}%"))
-
-    query = query.order_by(Book.id)
-
-    books = db.session.scalars(query)
-
-    books_response = []
-
-    for book in books:
-        books_response.append(book.to_dict())
-
-    return books_response
-
 @bp.get("/<book_id>")
 def get_one_book(book_id):
     book = validate_model(Book, book_id)

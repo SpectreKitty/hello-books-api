@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey
-from typing import Optional
-from typing import TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING
 from ..db import db
 
 class Book(db.Model):
