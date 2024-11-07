@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from .routes_utilities import validate_model, create_model, get_models_with_filters
 from app.models.author import Author
 from app.models.book import Book
+from app.models.genre import Genre
 from ..db import db
 
 bp = Blueprint("authors_bp", __name__, url_prefix="/authors")
